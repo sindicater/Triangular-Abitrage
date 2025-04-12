@@ -1,7 +1,9 @@
+# cythonintegration/main.py
 import time
 from kucoin.client import Market, User, Trade
 from colorama import init, Fore, Style
 from tabulate import tabulate
+# Import directly from the compiled module
 from arbitrage_logic import find_affordable_pairs, find_coins_with_multiple_pairs, calculate_affordable_units, find_best_triangular_arbitrage
 
 init()
@@ -243,6 +245,8 @@ def main():
                     continue
 
                 arbitrage_opportunities = find_best_triangular_arbitrage(liquid_coins, investment_amount, ticker_dict)
+                # Sort the opportunities in Python since Cython cpdef can't handle lambda
+                arbitrage_opportunities.sort(key=lambda x: x['profit'], reverse=True)
 
                 print_arbitrage_paths(arbitrage_opportunities)
 
